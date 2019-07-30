@@ -10,6 +10,12 @@
 
 @implementation LoadingCollectionViewCell
 
+- (void)dealloc
+{
+    [_loadingView release];
+    [super dealloc];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -31,6 +37,7 @@
                                               [self.loadingView.widthAnchor constraintEqualToConstant:100],
                                               [self.loadingView.heightAnchor constraintEqualToConstant:100]
                                               ]];
+    [self.loadingView release];
 }
 
 

@@ -10,5 +10,5 @@
 #import "UnsplashHttpClient.h"
 
 @interface MainCollectionViewController : UICollectionViewController
-@property (strong, nonatomic) UnsplashHttpClient* unsplashHttpCllient;
+@property (retain, nonatomic) UnsplashHttpClient* unsplashHttpCllient;
 @end

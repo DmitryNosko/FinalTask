@@ -9,10 +9,16 @@
 #import "StartViewController.h"
 
 @interface StartViewController ()
-@property (strong, nonatomic) UILabel* notReachableLabel;
+@property (retain, nonatomic) UILabel* notReachableLabel;
 @end
 
 @implementation StartViewController
+
+- (void)dealloc
+{
+    [_notReachableLabel release];
+    [super dealloc];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -22,7 +28,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    UILabel* notReachableLabel = [[UILabel alloc] init];
+    UILabel* notReachableLabel = [[[UILabel alloc] init] autorelease];
     notReachableLabel.backgroundColor = [UIColor whiteColor];
     notReachableLabel.numberOfLines = 0;
     notReachableLabel.text = @"Check your inthernet connection.";

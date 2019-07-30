@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CE656B9822E9A2010026BD7A /* LoadingCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE656B9722E9A2010026BD7A /* LoadingCollectionViewCell.m */; };
 		CE8DFE8422E38399006B8619 /* PhotoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8DFE8322E38399006B8619 /* PhotoModel.m */; };
 		CE910FBB22E5A69400C91213 /* PhotoFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE910FBA22E5A69400C91213 /* PhotoFilterViewController.m */; };
 		CEB4D15022EB0D3600D03313 /* FilterCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CEB4D14F22EB0D3600D03313 /* FilterCollectionViewCell.m */; };
@@ -40,8 +39,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		CE656B9622E9A2010026BD7A /* LoadingCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoadingCollectionViewCell.h; sourceTree = "<group>"; };
-		CE656B9722E9A2010026BD7A /* LoadingCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoadingCollectionViewCell.m; sourceTree = "<group>"; };
 		CE8DFE8222E38399006B8619 /* PhotoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoModel.h; sourceTree = "<group>"; };
 		CE8DFE8322E38399006B8619 /* PhotoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoModel.m; sourceTree = "<group>"; };
 		CE910FB922E5A69400C91213 /* PhotoFilterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoFilterViewController.h; sourceTree = "<group>"; };
@@ -135,8 +132,6 @@
 			children = (
 				CE8DFE8222E38399006B8619 /* PhotoModel.h */,
 				CE8DFE8322E38399006B8619 /* PhotoModel.m */,
-				CE656B9622E9A2010026BD7A /* LoadingCollectionViewCell.h */,
-				CE656B9722E9A2010026BD7A /* LoadingCollectionViewCell.m */,
 			);
 			path = PhotoModel;
 			sourceTree = "<group>";
@@ -332,7 +327,6 @@
 				CEDCAFC722E457A600F19CAF /* MainCollectionViewCell.m in Sources */,
 				CEF5C44722E318B900E161F8 /* PhotoLibraryCollectionViewController.m in Sources */,
 				CEDCAFCD22E4733500F19CAF /* UnsplashHttpClient.m in Sources */,
-				CE656B9822E9A2010026BD7A /* LoadingCollectionViewCell.m in Sources */,
 				CEDCAFC422E4578500F19CAF /* MainCollectionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -491,6 +485,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = FinalTask/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -507,6 +502,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = FinalTask/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface LoadingCollectionViewCell : UICollectionViewCell
-@property (strong, nonatomic) UIActivityIndicatorView* loadingView;
+@property (retain, nonatomic) UIActivityIndicatorView* loadingView;
 @end

@@ -16,12 +16,12 @@
 @property (assign, nonatomic) CGFloat collectionViewWidth;
 @property (assign, nonatomic) CGFloat xInsets;
 @property (assign, nonatomic) CGFloat cellSpacing;
-@property (strong, nonatomic) NSArray<CollectionModel*>* collections;
+@property (retain, nonatomic) NSArray<CollectionModel*>* collections;
 @property (assign, nonatomic) BOOL fetchingMore;
 @property (assign, nonatomic) NSUInteger currentPage;
-@property (strong, nonatomic) NSCache* collectionsCache;
+@property (retain, nonatomic) NSCache* collectionsCache;
 @property (assign, nonatomic) BOOL isButtomDirection;
-@property (strong, nonatomic) NSMutableArray* displayedPages;
+@property (retain, nonatomic) NSMutableArray* displayedPages;
 @end
 
 
@@ -32,6 +32,14 @@ static NSString * const reuseIdentifier = @"Cell";
 static NSUInteger const cellHeight = 170;
 static NSUInteger const cellAmount = 30;
 
+- (void)dealloc
+{
+    [_unsplashHttpCllient release];
+    [_collections release];
+    [_collectionsCache release];
+    [_displayedPages release];
+    [super dealloc];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -60,8 +68,8 @@ static NSUInteger const cellAmount = 30;
     
     self.isButtomDirection = YES;
     self.currentPage = 1;
-    self.collectionsCache = [NSCache new];
-    self.displayedPages = [NSMutableArray new];
+    self.collectionsCache = [[NSCache new] autorelease];
+    self.displayedPages = [[NSMutableArray new] autorelease];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -109,7 +117,7 @@ static NSUInteger const cellAmount = 30;
             [self.collectionsCache setObject:collections forKey:currentPage];
             [self.collectionsCache removeObjectForKey:@([currentPage unsignedIntegerValue] - 2)];
             
-            NSMutableArray<CollectionModel*>* array = [NSMutableArray new];
+            NSMutableArray<CollectionModel*>* array = [[NSMutableArray new] autorelease];
             NSMutableArray* prevPage = [self.collectionsCache objectForKey:@([currentPage unsignedIntegerValue] - 1)];
             if (prevPage) {
                 [array addObjectsFromArray:prevPage];
@@ -136,7 +144,7 @@ static NSUInteger const cellAmount = 30;
             [self.collectionsCache setObject:collections forKey:currentPage];
             [self.collectionsCache removeObjectForKey:@([currentPage unsignedIntegerValue] + 2)];
             
-            NSMutableArray<CollectionModel*>* array = [NSMutableArray new];
+            NSMutableArray<CollectionModel*>* array = [[NSMutableArray new] autorelease];
             [array addObjectsFromArray:collections];
             NSMutableArray* prevPage = [self.collectionsCache objectForKey:@([currentPage unsignedIntegerValue] + 1)];
             if (prevPage) {
@@ -177,6 +185,7 @@ static NSUInteger const cellAmount = 30;
     PhotoLibraryCollectionViewController* pc = [[PhotoLibraryCollectionViewController alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
     pc.identificator = [self.collections objectAtIndex:indexPath.item].identifier;
     [self.navigationController pushViewController:pc animated:YES];
+    [pc release];
 }
 
 -(UIEdgeInsets) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewFlowLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {

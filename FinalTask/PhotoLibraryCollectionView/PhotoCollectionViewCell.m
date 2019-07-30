@@ -10,7 +10,14 @@
 
 @implementation PhotoCollectionViewCell
 
+- (void)dealloc
+{
+    [_image release];
+    [super dealloc];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
+
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -30,6 +37,7 @@
                                               [self.image.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor],
                                               [self.image.topAnchor constraintEqualToAnchor:self.contentView.topAnchor]
                                               ]];
+    [self.image release];
     
 }
 

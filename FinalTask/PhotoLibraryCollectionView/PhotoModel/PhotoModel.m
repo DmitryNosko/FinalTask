@@ -10,6 +10,18 @@
 
 @implementation PhotoModel
 
+- (void)dealloc
+{
+    [_identifier release];
+    [_name release];
+    [_altDescription release];
+    [_thumbURL release];
+    [_userName release];
+    [_width release];
+    [_height release];
+    [super dealloc];
+}
+
 - (instancetype)initWithDictionary:(NSDictionary*) dictionary
 {
     self = [super init];

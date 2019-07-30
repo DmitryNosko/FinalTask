@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface FilterCollectionViewCell : UICollectionViewCell
-@property (strong, nonatomic) UIButton* imageFilterButton;
+@property (retain, nonatomic) UIButton* imageFilterButton;
 @end

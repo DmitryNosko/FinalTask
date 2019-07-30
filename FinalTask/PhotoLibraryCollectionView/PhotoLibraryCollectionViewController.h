@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface PhotoLibraryCollectionViewController : UICollectionViewController
-@property (strong, nonatomic) NSString* identificator;
+@property (retain, nonatomic) NSString* identificator;
 @end

@@ -10,6 +10,16 @@
 
 @implementation MainCollectionViewCell
 
+- (void)dealloc
+{
+    [_preViewMainImage release];
+    [_preViewRightTopImage release];
+    [_preViewRightBottomImage release];
+    [_collectionName release];
+    [_totalPhoto release];
+    [super dealloc];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -69,7 +79,11 @@
                                               [self.totalPhoto.topAnchor constraintEqualToAnchor:self.collectionName.bottomAnchor],
                                               [self.totalPhoto.heightAnchor constraintEqualToConstant:30]
                                               ]];
-    
+    [self.preViewMainImage release];
+    [self.preViewRightTopImage release];
+    [self.preViewRightBottomImage release];
+    [self.collectionName release];
+    [self.totalPhoto release];
     
 }
 

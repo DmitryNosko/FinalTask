@@ -9,8 +9,8 @@
 #import "UnsplashHttpClient.h"
 
 @interface UnsplashHttpClient ()
-@property (strong, nonatomic) NSURLSession* session;
-@property (strong, nonatomic) NSCache* cache;
+@property (retain, nonatomic) NSURLSession* session;
+@property (retain, nonatomic) NSCache* cache;
 @end
 
 static NSString* const COLLECTIONS_URL_FORMAT = @"https://api.unsplash.com/collections?page=%@&per_page=%@";
@@ -29,6 +29,13 @@ NSString* const UnsplashHttpClientCollectionImageWasLoadingError = @"UnsplashHtt
 
 @implementation UnsplashHttpClient
 
+- (void)dealloc
+{
+    [_session release];
+    [_cache release];
+    [super dealloc];
+}
+
 - (instancetype)initWithURLSession:(NSURLSession*) session
 {
     self = [super init];
@@ -41,7 +48,7 @@ NSString* const UnsplashHttpClientCollectionImageWasLoadingError = @"UnsplashHtt
 - (void) getPhotoCollections:(NSUInteger) page perPage:(NSUInteger) perPage {
     NSString* urlString = [NSString stringWithFormat:COLLECTIONS_URL_FORMAT, @(page), @(perPage)];
     NSURL* url = [NSURL URLWithString:urlString];
-    NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+    NSMutableURLRequest* request = [[[NSMutableURLRequest alloc] initWithURL:url] autorelease];
     [request setValue:CLIENT_ID forHTTPHeaderField:AUTHORIZATION_HEADER_FIELD];
     [request setHTTPMethod:@"GET"];
     
@@ -52,9 +59,9 @@ NSString* const UnsplashHttpClientCollectionImageWasLoadingError = @"UnsplashHtt
         } else {
             
             NSArray* responseArr =[NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            NSMutableArray* collections = [NSMutableArray new];
+            NSMutableArray* collections = [[NSMutableArray new] autorelease];
             for (NSDictionary* dic in responseArr) {
-                CollectionModel* cm = [[CollectionModel alloc] initWithDictionary:dic];
+                CollectionModel* cm = [[[CollectionModel alloc] initWithDictionary:dic] autorelease];
                 [collections addObject:cm];
                 
                 [[self.session dataTaskWithURL:cm.mainImageURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -93,7 +100,7 @@ NSString* const UnsplashHttpClientCollectionImageWasLoadingError = @"UnsplashHtt
 - (void) getPhotoes:(NSString *)collectionId page:(NSUInteger) page perPage:(NSString *)perPage {
     NSString* urlString = [NSString stringWithFormat:PHOTOES_URL_FORMAT, collectionId, @(page), perPage];
     NSURL* url = [NSURL URLWithString:urlString];
-    NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+    NSMutableURLRequest* request = [[[NSMutableURLRequest alloc] initWithURL:url] autorelease];
     [request setValue:CLIENT_ID forHTTPHeaderField:AUTHORIZATION_HEADER_FIELD];
     [request setHTTPMethod:@"GET"];
     
@@ -102,9 +109,9 @@ NSString* const UnsplashHttpClientCollectionImageWasLoadingError = @"UnsplashHtt
             [[NSNotificationCenter defaultCenter] postNotificationName:UnsplashHttpClientCollectionImageWasLoadingError object:nil];
         } else {
             NSArray* responseArr =[NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            NSMutableArray* photos = [NSMutableArray new];
+            NSMutableArray* photos = [[NSMutableArray new] autorelease];
             for (NSDictionary* dic in responseArr) {
-                PhotoModel* photoModel = [[PhotoModel  alloc] initWithDictionary:dic];
+                PhotoModel* photoModel = [[[PhotoModel  alloc] initWithDictionary:dic] autorelease];
                 [photos addObject:photoModel];
                 
                 [[self.session dataTaskWithURL:photoModel.thumbURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {

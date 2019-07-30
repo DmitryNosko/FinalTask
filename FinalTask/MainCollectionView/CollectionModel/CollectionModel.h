@@ -13,13 +13,13 @@
 
 - (instancetype)initWithDictionary:(NSDictionary*) dictionary;
 
-@property (strong, nonatomic) NSString* identifier;
-@property (strong, nonatomic) NSString* title;
+@property (retain, nonatomic) NSString* identifier;
+@property (retain, nonatomic) NSString* title;
 @property (assign, nonatomic) NSUInteger totalPhoto;
-@property (strong, nonatomic) NSURL* mainImageURL;
-@property (strong, nonatomic) UIImage* mainImage;
-@property (strong, nonatomic) NSURL* rightTopImageURL;
-@property (strong, nonatomic) UIImage* rightTopImage;
-@property (strong, nonatomic) NSURL* rightBotoomImageURL;
-@property (strong, nonatomic) UIImage* rightBotoomImage;
+@property (retain, nonatomic) NSURL* mainImageURL;
+@property (retain, nonatomic) UIImage* mainImage;
+@property (retain, nonatomic) NSURL* rightTopImageURL;
+@property (retain, nonatomic) UIImage* rightTopImage;
+@property (retain, nonatomic) NSURL* rightBotoomImageURL;
+@property (retain, nonatomic) UIImage* rightBotoomImage;
 @end

@@ -13,7 +13,7 @@ extern NSString* const PhotoFilterViewControllerPhotoWasUpdatedNotification;
 extern NSString* const PhotoFilterViewControllerPhotoWasUpdatedNotificationKey;
 
 @interface PhotoFilterViewController : UIViewController
-@property (strong, nonatomic) NSIndexPath* indexPath;
-@property (strong, nonatomic) PhotoModel* photoModel;
+@property (retain, nonatomic) NSIndexPath* indexPath;
+@property (retain, nonatomic) PhotoModel* photoModel;
 @end
 

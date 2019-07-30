@@ -11,15 +11,13 @@
 
 
 @interface PhotoFilterViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
-@property (strong, nonatomic) UIImageView* imageToFiltr;
+@property (retain, nonatomic) UIImageView* imageToFiltr;
 @property (weak, nonatomic) UICollectionView* collectionView;
-@property (strong, nonatomic) NSArray* filters;
-@property (strong, nonatomic) UISlider* shadowSlider;
-@property (strong, nonatomic) UISlider* alphaSlider;
-@property (strong, nonatomic) UILabel* imageDescriptionLabel;
-@property (strong, nonatomic) UILabel* imageResolutionLabel;
-@property (strong, nonatomic) UILabel* imageSizeLabel;
-@property (strong, nonatomic) UILabel* imageAuthorLabel;
+@property (retain, nonatomic) NSArray* filters;
+@property (retain, nonatomic) UILabel* imageDescriptionLabel;
+@property (retain, nonatomic) UILabel* imageResolutionLabel;
+@property (retain, nonatomic) UILabel* imageSizeLabel;
+@property (retain, nonatomic) UILabel* imageAuthorLabel;
 @end
 
 static NSString* const CELL_IDENTIFIER = @"Cell";
@@ -28,6 +26,19 @@ NSString* const PhotoFilterViewControllerPhotoWasUpdatedNotificationKey = @"Phot
 static NSString* const NO_DESCRIPTION = @"no description";
 
 @implementation PhotoFilterViewController
+
+- (void)dealloc
+{
+    [_imageToFiltr release];
+    [_filters release];
+    [_imageDescriptionLabel release];
+    [_imageResolutionLabel release];
+    [_imageSizeLabel release];
+    [_imageAuthorLabel release];
+    [_indexPath release];
+    [_photoModel release];
+    [super dealloc];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -44,6 +55,7 @@ static NSString* const NO_DESCRIPTION = @"no description";
     
     UIBarButtonItem* editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editImage:)];
     self.navigationItem.rightBarButtonItem = editButton;
+    [editButton release];
     
     self.filters = @[@(kCGBlendModeCopy),
                      @(kCGBlendModeOverlay),
@@ -91,7 +103,6 @@ static NSString* const NO_DESCRIPTION = @"no description";
 - (void) addFilter:(UIButton*) sender {
     NSNumber* blend = [self.filters objectAtIndex:sender.tag];
     UIImage* image = [self getAvatar:[blend intValue]];
-    //[self multiplyImageByConstantColor:self.imageToFiltr.image color:[UIColor redColor]];
     self.imageToFiltr.image = image;
 }
 
@@ -108,7 +119,7 @@ static NSString* const NO_DESCRIPTION = @"no description";
     
     UIBarButtonSystemItem item = UIBarButtonSystemItemEdit;
     if (!isHidden) {
-        NSDictionary* dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:self.imageToFiltr.image, @"photo", self.indexPath, @"indexPath", nil];
+        NSDictionary* dictionary = [[[NSDictionary alloc] initWithObjectsAndKeys:self.imageToFiltr.image, @"photo", self.indexPath, @"indexPath", nil] autorelease];
         [[NSNotificationCenter defaultCenter] postNotificationName:PhotoFilterViewControllerPhotoWasUpdatedNotification
                                                             object:nil
                                                           userInfo:dictionary];
@@ -123,6 +134,7 @@ static NSString* const NO_DESCRIPTION = @"no description";
     
     UIBarButtonItem* editB = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:item target:self action:@selector(editImage:)];
     [self.navigationItem setRightBarButtonItem:editB animated:YES];
+    [editB release];
 }
 
 #pragma mark - Filters
@@ -166,7 +178,7 @@ static NSString* const NO_DESCRIPTION = @"no description";
     frame.origin = CGPointZero;
     UICollectionViewFlowLayout* fl = [[UICollectionViewFlowLayout alloc] init];
     [fl setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    UICollectionView* collectionView = [[UICollectionView alloc] initWithFrame:frame collectionViewLayout:fl];
+    UICollectionView* collectionView = [[[UICollectionView alloc] initWithFrame:frame collectionViewLayout:fl] autorelease];
     [self.view addSubview:collectionView];
     
     self.collectionView = collectionView;
@@ -180,6 +192,7 @@ static NSString* const NO_DESCRIPTION = @"no description";
                                               [self.collectionView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor constant:-50],
                                               [self.collectionView.heightAnchor constraintEqualToConstant:100]
                                               ]];
+    [fl release];
 }
 
 
@@ -194,6 +207,7 @@ static NSString* const NO_DESCRIPTION = @"no description";
                                               [self.imageToFiltr.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:79],
                                               [self.imageToFiltr.heightAnchor constraintEqualToConstant:250]
                                               ]];
+    [self.imageToFiltr release];
 }
 
 //- (UIImage*) multiplyImageByConstantColor:(UIImage*)image color:(UIColor*) color {
@@ -254,6 +268,7 @@ static NSString* const NO_DESCRIPTION = @"no description";
                                             [self.imageDescriptionLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-15],
                                             [self.imageDescriptionLabel.topAnchor constraintEqualToAnchor:self.imageToFiltr.bottomAnchor constant:20],
                                             ]];
+    [description release];
    
     UILabel* resolution = [[UILabel alloc] init];
     resolution.backgroundColor = [UIColor whiteColor];
@@ -268,20 +283,7 @@ static NSString* const NO_DESCRIPTION = @"no description";
                                               [self.imageResolutionLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-15],
                                               [self.imageResolutionLabel.topAnchor constraintEqualToAnchor:self.imageDescriptionLabel.bottomAnchor constant:15],
                                               ]];
-    
-//    UILabel* size = [[UILabel alloc] init];
-//    size.backgroundColor = [UIColor whiteColor];
-//    size.numberOfLines = 0;
-//    size.text = @"Image size: 5104x2034 mb";
-//    [self.view addSubview:size];
-//    self.imageSizeLabel = size;
-//
-//    self.imageSizeLabel.translatesAutoresizingMaskIntoConstraints = NO;
-//    [NSLayoutConstraint activateConstraints:@[
-//                                              [self.imageSizeLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:15],
-//                                              [self.imageSizeLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-15],
-//                                              [self.imageSizeLabel.topAnchor constraintEqualToAnchor:self.imageResolutionLabel.bottomAnchor constant:15],
-//                                              ]];
+    [resolution release];
     
     UILabel* author = [[UILabel alloc] init];
     author.backgroundColor = [UIColor whiteColor];
@@ -296,6 +298,7 @@ static NSString* const NO_DESCRIPTION = @"no description";
                                               [self.imageAuthorLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-15],
                                               [self.imageAuthorLabel.topAnchor constraintEqualToAnchor:self.imageResolutionLabel.bottomAnchor constant:15],
                                               ]];
+    [author release];
 }
 
 

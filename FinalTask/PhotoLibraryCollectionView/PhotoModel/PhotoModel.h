@@ -10,14 +10,14 @@
 #import <UIKit/UIKit.h>
 
 @interface PhotoModel : NSObject
-@property (strong, nonatomic) NSString* identifier;
-@property (strong, nonatomic) NSString* name;
-@property (strong, nonatomic) NSString* altDescription;
-@property (strong, nonatomic) NSURL* thumbURL;
-@property (strong, nonatomic) UIImage* thumbImage;
-@property (strong, nonatomic) NSString* userName;
-@property (strong, nonatomic) NSNumber*  height;
-@property (strong, nonatomic) NSNumber*  width;
+@property (retain, nonatomic) NSString* identifier;
+@property (retain, nonatomic) NSString* name;
+@property (retain, nonatomic) NSString* altDescription;
+@property (retain, nonatomic) NSURL* thumbURL;
+@property (retain, nonatomic) UIImage* thumbImage;
+@property (retain, nonatomic) NSString* userName;
+@property (retain, nonatomic) NSNumber*  height;
+@property (retain, nonatomic) NSNumber*  width;
 
 - (instancetype)initWithDictionary:(NSDictionary*) dictionary;
 

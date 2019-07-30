@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface MainCollectionViewCell : UICollectionViewCell
-@property (strong, nonatomic) UIImageView* preViewMainImage;
-@property (strong, nonatomic) UIImageView* preViewRightTopImage;
-@property (strong, nonatomic) UIImageView* preViewRightBottomImage;
-@property (strong, nonatomic) UILabel* collectionName;
-@property (strong, nonatomic) UILabel* totalPhoto;
+@property (retain, nonatomic) UIImageView* preViewMainImage;
+@property (retain, nonatomic) UIImageView* preViewRightTopImage;
+@property (retain, nonatomic) UIImageView* preViewRightBottomImage;
+@property (retain, nonatomic) UILabel* collectionName;
+@property (retain, nonatomic) UILabel* totalPhoto;
 @end

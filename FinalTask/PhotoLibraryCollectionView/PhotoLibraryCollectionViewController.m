@@ -17,26 +17,37 @@
 @property (assign, nonatomic) CGFloat collectionViewWidth;
 @property (assign, nonatomic) CGFloat xInsets;
 @property (assign, nonatomic) CGFloat cellSpacing;
-@property (strong, nonatomic) NSMutableArray<PhotoModel*>* photos;
-@property (strong, nonatomic) UnsplashHttpClient* unsplashHttpCllient;
+@property (retain, nonatomic) NSMutableArray<PhotoModel*>* photos;
+@property (retain, nonatomic) UnsplashHttpClient* unsplashHttpCllient;
 @property (assign, nonatomic) BOOL fetchingMore;
 @property (assign, nonatomic) NSUInteger currentPage;
-@property (strong, nonatomic) NSCache* photosCache;
+@property (retain, nonatomic) NSCache* photosCache;
 @property (assign, nonatomic) BOOL isButtomDirection;
-@property (strong, nonatomic) NSMutableArray* displayedPages;
+@property (retain, nonatomic) NSMutableArray* displayedPages;
+@property (assign, nonatomic) BOOL isNextFirstPosition;
+@property (assign, nonatomic) NSInteger chessOrderCounter;
 @end
 
 @implementation PhotoLibraryCollectionViewController
 
 static NSString * const reuseIdentifier = @"Cell";
-static NSString * const reuseLoadingIdentifier = @"loadingCell";
 static NSUInteger const cellHeight = 155;
 static NSUInteger const cellAmount = 15;
 static NSUInteger const insets = 10;
 
+- (void)dealloc
+{
+    [_identificator release];
+    [_photos release];
+    [_unsplashHttpCllient release];
+    [_photosCache release];
+    [_displayedPages release];
+    [super dealloc];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.unsplashHttpCllient = [[UnsplashHttpClient alloc] initWithURLSession:[NSURLSession sharedSession]];
+    self.unsplashHttpCllient = [[[UnsplashHttpClient alloc] initWithURLSession:[NSURLSession sharedSession]] autorelease];
     self.title = @"Photos";
     self.collectionView.backgroundColor = [UIColor whiteColor];
     self.photos = [NSMutableArray new];
@@ -46,7 +57,8 @@ static NSUInteger const insets = 10;
     self.numberOfColumns = 2;
     [self.collectionView registerClass:[PhotoCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
     self.isButtomDirection = YES;
-    
+    self.isNextFirstPosition = YES;
+    self.chessOrderCounter = 0;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(collectionImageWasLoadNotification:)
                                                  name:UnsplashHttpClientCollectionImageWasLoaded
@@ -68,8 +80,8 @@ static NSUInteger const insets = 10;
                                                object:nil];
     
     self.currentPage = 1;
-    self.photosCache = [NSCache new];
-    self.displayedPages = [NSMutableArray new];
+    self.photosCache = [[NSCache new] autorelease];
+    self.displayedPages = [[NSMutableArray new] autorelease];
     
     NSLog(@"he = %@", @(self.collectionView.frame.size.height));
 }
@@ -118,7 +130,7 @@ static NSUInteger const insets = 10;
             
             [self.photosCache setObject:photos forKey:currentPage];
             [self.photosCache removeObjectForKey:@([currentPage unsignedIntegerValue] - 2)];
-            NSMutableArray<PhotoModel*>* array = [NSMutableArray new];
+            NSMutableArray<PhotoModel*>* array = [[NSMutableArray new] autorelease];
             
             NSMutableArray* prevPage = [self.photosCache objectForKey:@([currentPage unsignedIntegerValue] - 1)];
             if (prevPage) {
@@ -146,7 +158,7 @@ static NSUInteger const insets = 10;
             [self.photosCache setObject:photos forKey:currentPage];
             [self.photosCache removeObjectForKey:@([currentPage unsignedIntegerValue] + 2)];
             
-            NSMutableArray<PhotoModel*>* array = [NSMutableArray new];
+            NSMutableArray<PhotoModel*>* array = [[NSMutableArray new] autorelease];
             
             [array addObjectsFromArray:photos];
             
@@ -201,12 +213,28 @@ static NSUInteger const insets = 10;
     pc.photoModel = photoModel;
     pc.indexPath = indexPath;
     [self.navigationController pushViewController:pc animated:YES];
+    [pc release];
 }
 
 
 #pragma mark - <UICollectionViewDelegateFlowLayout>
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+//    self.chessOrderCounter++;
+//    if (self.isNextFirstPosition) {
+//        self.isNextFirstPosition = NO;
+//        self.chessOrderCounter = 0;
+//        return CGSizeMake((self.collectionViewWidth / self.numberOfColumns) - (self.xInsets + self.cellSpacing), 100);
+//    } else if (self.chessOrderCounter == 3) {
+//        self.isNextFirstPosition = YES;
+//        self.chessOrderCounter = 0;
+//        return CGSizeMake((self.collectionViewWidth / self.numberOfColumns) - (self.xInsets + self.cellSpacing), 100);
+//    } else {
+//        return CGSizeMake((self.collectionViewWidth / self.numberOfColumns) - (self.xInsets + self.cellSpacing), (self.collectionViewWidth / self.numberOfColumns) - (self.xInsets + self.cellSpacing));
+//    }
+//}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     return CGSizeMake((self.collectionViewWidth / self.numberOfColumns) - (self.xInsets + self.cellSpacing), (self.collectionViewWidth / self.numberOfColumns) - (self.xInsets + self.cellSpacing));
 }
 
@@ -214,6 +242,7 @@ static NSUInteger const insets = 10;
 {
     return UIEdgeInsetsMake(10, 10, 10, 10);
 }
+
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView {
     
@@ -242,7 +271,7 @@ static NSUInteger const insets = 10;
 
 - (void) beginBatchFetch {
     self.fetchingMore = YES;
-    [self.unsplashHttpCllient getPhotoes:self.identificator page:self.currentPage perPage:@"30"];
+    [self.unsplashHttpCllient getPhotoes:self.identificator page:self.currentPage perPage:@"28"];
 }
 
 @end

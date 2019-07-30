@@ -10,6 +10,12 @@
 
 @implementation FilterCollectionViewCell
 
+- (void)dealloc
+{
+    [_imageFilterButton release];
+    [super dealloc];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];

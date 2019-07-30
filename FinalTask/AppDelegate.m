@@ -13,25 +13,33 @@
 
 
 @interface AppDelegate ()
-@property (nonatomic, strong) Reachability *checker;
-@property (strong, nonatomic) UINavigationController* navigationController;
-@property (strong, nonatomic) StartViewController* startVC;
+@property (retain, nonatomic) Reachability* checker;
+@property (retain, nonatomic) UINavigationController* navigationController;
+@property (retain, nonatomic) StartViewController* startVC;
 @end
 
 @implementation AppDelegate
 
+- (void)dealloc
+{
+    [_checker release];
+    [_navigationController release];
+    [_startVC release];
+    [super dealloc];
+}
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     
-    StartViewController* sc = [[StartViewController alloc] init];
+    StartViewController* sc = [[[StartViewController alloc] init] autorelease];
     [self.window setRootViewController:sc];
     self.startVC = sc;
     
-    MainCollectionViewController* pc = [[MainCollectionViewController alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
-    pc.unsplashHttpCllient = [[UnsplashHttpClient alloc] initWithURLSession:[NSURLSession sharedSession]];
-    UINavigationController* nc  = [[UINavigationController alloc] initWithRootViewController:pc];
+    MainCollectionViewController* pc = [[[MainCollectionViewController alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]] autorelease];
+    pc.unsplashHttpCllient = [[[UnsplashHttpClient alloc] initWithURLSession:[NSURLSession sharedSession]] autorelease];
+    UINavigationController* nc  = [[[UINavigationController alloc] initWithRootViewController:pc] autorelease];
     self.navigationController = nc;
     
     _checker = [Reachability reachabilityWithHostname:@"unsplash.com"];
@@ -40,8 +48,8 @@
     NSUInteger diskCapacity = 10 * 1024 * 1024;
     NSURLCache* urlCache = [[NSURLCache alloc] initWithMemoryCapacity:memoryCapacity diskCapacity:diskCapacity diskPath:nil];
     [NSURLCache setSharedURLCache:urlCache];
-    
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 

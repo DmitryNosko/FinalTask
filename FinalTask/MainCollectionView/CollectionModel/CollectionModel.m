@@ -10,6 +10,19 @@
 
 @implementation CollectionModel
 
+- (void)dealloc
+{
+    [_identifier release];
+    [_title release];
+    [_mainImageURL release];
+    [_mainImage release];
+    [_rightTopImage release];
+    [_rightBotoomImage release];
+    [_rightTopImageURL release];
+    [_rightBotoomImageURL release];
+    [super dealloc];
+}
+
 - (instancetype)initWithDictionary:(NSDictionary*) dictionary
 {
     self = [super init];
